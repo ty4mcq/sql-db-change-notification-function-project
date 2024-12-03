@@ -35,10 +35,26 @@ namespace SqlDbChangeNotificationSolution
 
             foreach (SqlChange<ToDoItem> change in changes)
             {
-                ToDoItem toDoItem = change.Item;
-                logger.LogInformation($"Change operation: {change.Operation}");
-                logger.LogInformation($"Id: {toDoItem.Id}, Title: {toDoItem.title}, Url: {toDoItem.url}, Completed: {toDoItem.completed}");
+                try
+                {
+                    ToDoItem toDoItem = change.Item;
+                    logger.LogInformation($"Change operation: {change.Operation}");
+                    logger.LogInformation($"Id: {toDoItem.Id}, Title: {toDoItem.title}, Url: {toDoItem.url}, Completed: {toDoItem.completed}");
+
+                    // You can add additional processing logic here (e.g., send an email, update another service, etc.)
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError($"Error processing ToDoItem with Id {change.Item.Id}: {ex.Message}");
+                    logger.LogError($"Exception details: {ex.ToString()}");
+                }
             }
+
+            // var connectionString = "ACS_CONNECTION_STRING";
+            // var emailClient = new EmailClient(connectionString);
+
+            // var emailContent = new EmailContent("Test Subject");
+            // emailContent.PlainText = "Test Body";
         }
     }
 }
