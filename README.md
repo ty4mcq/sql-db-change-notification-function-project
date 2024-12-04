@@ -15,7 +15,7 @@ You are an Azure Developer joining a team responsible for designing, developing,
 
 ## Questions: 
 - [x] Develop an Azure Function that triggers a notification whenever a new record is added to an Azure SQL Database. Describe the architecture of your solution and how you ensure the function's scalability and reliability. 
-- [ ] Integrate an Azure Logic App with an on-premises legacy system using Azure Service Bus. Explain the communication flow between the Logic App and the on-premises system, ensuring security and reliability. 
+- [x] Integrate an Azure Logic App with an on-premises legacy system using Azure Service Bus. Explain the communication flow between the Logic App and the on-premises system, ensuring security and reliability. 
 - [ ] Configure a CI/CD pipeline using Azure DevOps for automating the deployment of a web application hosted on Azure App Service. Provide a step-by-step guide on setting up the pipeline and deploying the application using infrastructure as code. 
 - [ ] Implement role-based access control (RBAC) for an Azure solution to ensure proper authorization and compliance with data protection regulations. Discuss your approach to managing user roles and permissions securely. 
 - [ ] Set up monitoring and alerting using Azure Monitor and Application Insights for an Azure-based application. Describe the key metrics you would monitor and how you would optimize resources based on performance insights. 
