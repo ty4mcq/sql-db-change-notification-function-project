@@ -27,7 +27,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.WORKING_DIRECTORY}}/myApp"
+        run: dotnet publish -c Release -o "${{env.WORKING_DIRECTORY}}/DemoWebApplication.csproj"
 
   deploy:
     runs-on: windows-latest
@@ -57,5 +57,5 @@ jobs:
         with:
           app-name: 'infotechtion-tyler-demo-web-application'
           slot-name: 'Production'
-          package: '${{env.WORKING_DIRECTORY}}/myApp'
+          package: '${{env.WORKING_DIRECTORY}}/DemoWebApplication.csproj'
           
