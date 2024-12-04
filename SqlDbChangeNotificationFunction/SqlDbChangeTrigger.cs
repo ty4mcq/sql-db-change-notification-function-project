@@ -33,6 +33,7 @@ namespace SqlDbChangeNotificationFunction
                     logger.LogInformation($"Id: {toDoItem.Id}, Order: {toDoItem.order}, Title: {toDoItem.title}, Url: {toDoItem.url}, Completed: {toDoItem.completed}");
 
                     await AcsEmailSender.SendEmailNotification(toDoItem, logger);
+                    await LogicAppSender.SendToLogicAppAsync(toDoItem, change.Operation, logger);
                 }
                 catch (Exception ex)
                 {
