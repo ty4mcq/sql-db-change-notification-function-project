@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - infotechtion-tyler-demo-web-application
 
 on:
@@ -11,6 +8,7 @@ on:
 
 env:
   WORKING_DIRECTORY: DemoWebApplication
+
 jobs:
   build:
     runs-on: windows-latest
@@ -24,10 +22,16 @@ jobs:
           dotnet-version: '9.x'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release ${{ env.WORKING_DIRECTORY }}/DemoWebApplication.csproj
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.WORKING_DIRECTORY}}/DemoWebApplication.csproj"
+        run: dotnet publish --configuration Release --output ./publish ${{ env.WORKING_DIRECTORY }}/DemoWebApplication.csproj
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ./publish
 
   deploy:
     runs-on: windows-latest
@@ -36,20 +40,20 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write  # This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CA6B0DC155774B3D8E1C54F66D35F54A }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_CD5575AE16F541AF80E001968BEEED1F }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_619EF1A7E71F4F8685C4B8ABAECE48AD }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -57,5 +61,4 @@ jobs:
         with:
           app-name: 'infotechtion-tyler-demo-web-application'
           slot-name: 'Production'
-          package: '${{env.WORKING_DIRECTORY}}/DemoWebApplication.csproj'
-          
+          package: './publish'
