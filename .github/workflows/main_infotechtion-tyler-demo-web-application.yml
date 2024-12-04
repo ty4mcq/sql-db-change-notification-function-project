@@ -1,4 +1,4 @@
-name: Build and deploy ASP.Net Core app to an Azure Web App
+name: Build and deploy ASP.Net Core app to Azure Web App - infotechtion-tyler-demo-web-application
 
 on:
   push:
@@ -6,9 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  AZURE_WEBAPP_NAME: 'infotechtion-tyler-demo-web-application'
-  DOTNET_VERSION: '9.x'
 jobs:
   build:
     runs-on: windows-latest
@@ -16,19 +13,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: List files for debugging
-        run: ls -R
-
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: '9.x'
 
       - name: Build with dotnet
         run: dotnet build --configuration Release DemoWebApplication/DemoWebApplication.csproj
+        working-directory: ./DemoWebApplication
 
       - name: dotnet publish
-        run: dotnet publish --configuration Release --output ./DemoWebApplication/publish DemoWebApplication/DemoWebApplication.csproj
+        run: dotnet publish --configuration Release --output ./publish DemoWebApplication.csproj
+        working-directory: ./DemoWebApplication
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -62,6 +58,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: 'infotechtion-tyler-demo-web-application'
           slot-name: 'Production'
           package: ./DemoWebApplication/publish
