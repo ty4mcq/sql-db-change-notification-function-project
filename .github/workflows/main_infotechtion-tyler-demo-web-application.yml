@@ -7,9 +7,8 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: (redacted) # set this to the name of your Azure Web App
-  DOTNET_VERSION: '9.0' # set this to the .NET Core version to use
-
+  AZURE_WEBAPP_NAME: 'infotechtion-tyler-demo-web-application'
+  DOTNET_VERSION: '9.x'
 jobs:
   build:
     runs-on: windows-latest
@@ -17,16 +16,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: List files for debugging
+        run: ls -R
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release ./DemoWebApplication/DemoWebApplication.csproj
+        run: dotnet build --configuration Release DemoWebApplication/DemoWebApplication.csproj
 
       - name: dotnet publish
-        run: dotnet publish --configuration Release --output ./DemoWebApplication/publish ./DemoWebApplication/DemoWebApplication.csproj
+        run: dotnet publish --configuration Release --output ./DemoWebApplication/publish DemoWebApplication/DemoWebApplication.csproj
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
