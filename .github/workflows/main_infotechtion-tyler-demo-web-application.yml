@@ -9,7 +9,40 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  RESOURCE_GROUP: IDK
+  LOCATION: UK South
+  WEB_APP_NAME: EDVEO
+  SKU: F1
+  LANGUAGE: .net
+  REPO_URL: ''
+
 jobs:
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Login to Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy Web App Infrastructure
+      run: |
+          az deployment group create \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --template-file webapp-deploy.json \
+            --parameters webAppName=${{ env.WEB_APP_NAME }} \
+                        location=${{ env.LOCATION }} \
+                        sku=${{ env.SKU }} \
+                        language=${{ env.LANGUAGE }} \
+                        helloWorld=${{ env.HELLO_WORLD }} \
+                        repoUrl=${{ env.REPO_URL }}
+
+  
   build:
     runs-on: windows-latest
 
