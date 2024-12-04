@@ -9,6 +9,8 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  WORKING_DIRECTORY: DemoWebApplication
 jobs:
   build:
     runs-on: windows-latest
@@ -25,13 +27,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o "${{env.WORKING_DIRECTORY}}/myApp"
 
   deploy:
     runs-on: windows-latest
@@ -61,5 +57,5 @@ jobs:
         with:
           app-name: 'infotechtion-tyler-demo-web-application'
           slot-name: 'Production'
-          package: .
+          package: '${{env.WORKING_DIRECTORY}}/myApp'
           
